@@ -137,7 +137,7 @@ public class RedisController {
 
         log.info("pList : " + pList);
 
-        Set<RedisDTO> rSet = Optional.ofNullable(myRedisSerivce.saveSetJSON(pList))
+        Set<RedisDTO> rSet = Optional.ofNullable(myRedisSerivce.saveZSetJSON(pList))
                 .orElseGet(HashSet::new);
 
         log.info(this.getClass().getName() + "[컨트롤러] : saveZSetJSON 끝!");
