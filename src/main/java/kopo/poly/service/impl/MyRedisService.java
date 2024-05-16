@@ -1,6 +1,7 @@
 package kopo.poly.service.impl;
 
 import java.util.List;
+import java.util.Set;
 import kopo.poly.dto.RedisDTO;
 import kopo.poly.persistance.redis.IMyRedisMapper;
 import kopo.poly.service.IMyRedisSerivce;
@@ -109,5 +110,77 @@ public class MyRedisService implements IMyRedisSerivce {
 
 
         return rList;
+    }
+
+    @Override
+    public RedisDTO saveHash(RedisDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + "[서비스] : saveHash 시작!");
+
+        String redisKey ="myRedis_Hash";
+
+        RedisDTO rDTO;
+
+        int res = myRedisMapper.saveHash(redisKey, pDTO);
+
+        if(res == 1) {
+            rDTO = myRedisMapper.getHash(redisKey);
+
+        } else {
+            log.info("지성현공화국 공습 경보 !!! 레디스 저장 실패 !!");
+            throw new Exception("Reids 저장 실패");
+        }
+
+        log.info(this.getClass().getName() + "[서비스] : saveHash 끝!");
+
+
+        return rDTO;
+    }
+
+    @Override
+    public Set<RedisDTO> saveSetJSON(List<RedisDTO> pList) throws Exception {
+        log.info(this.getClass().getName() + "[서비스] : saveSetJSON 시작!");
+
+        String redisKey ="myRedis_Set_JSON";
+
+        Set<RedisDTO> rSet;
+
+        int res = myRedisMapper.saveSetJSON(redisKey, pList);
+
+        if(res == 1) {
+            rSet = myRedisMapper.getSetJSON(redisKey);
+
+        } else {
+            log.info("지성현공화국 공습 경보 !!! 레디스 저장 실패 !!");
+            throw new Exception("Reids 저장 실패");
+        }
+
+        log.info(this.getClass().getName() + "[서비스] : saveSetJSON 끝!");
+
+
+        return rSet;
+    }
+
+    @Override
+    public Set<RedisDTO> saveZSetJSON(List<RedisDTO> pList) throws Exception {
+        log.info(this.getClass().getName() + "[서비스] : saveZSetJSON 시작!");
+
+        String redisKey ="myRedis_ZSet_JSON";
+
+        Set<RedisDTO> rSet;
+
+        int res = myRedisMapper.saveZSetJSON(redisKey, pList);
+
+        if(res == 1) {
+            rSet = myRedisMapper.getZSetJSON(redisKey);
+
+        } else {
+            log.info("지성현공화국 공습 경보 !!! 레디스 저장 실패 !!");
+            throw new Exception("Reids 저장 실패");
+        }
+
+        log.info(this.getClass().getName() + "[서비스] : saveZSetJSON 끝!");
+
+
+        return rSet;
     }
 }

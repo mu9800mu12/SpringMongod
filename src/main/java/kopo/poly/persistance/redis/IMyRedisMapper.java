@@ -1,7 +1,9 @@
 package kopo.poly.persistance.redis;
 
 import java.util.List;
+import java.util.Set;
 import kopo.poly.dto.RedisDTO;
+import org.springframework.boot.autoconfigure.cache.CacheProperties.Redis;
 
 public interface IMyRedisMapper {
 
@@ -55,7 +57,33 @@ public interface IMyRedisMapper {
      * List타입 JSON 정보 가져오기
      */
     List<RedisDTO> getListJSON(String redisKey) throws Exception;
+    /*
+     * Hash 타입에 문자열 현태로 저장하기
+     */
+    int saveHash(String redisKey, RedisDTO pDTO) throws Exception;
 
+    /*
+     * Hash 타입에 문자열 형태로 저장된 값 가져오기
+     */
+    RedisDTO getHash(String redisKey) throws Exception;
+
+    /*
+     * Set타입에 JSON 형태로 람다식 이용해 저장하기
+     */
+    int saveSetJSON(String redisKey, List<RedisDTO> pList) throws Exception;
+
+    /*
+     * Set타입에 JSON 형태로 람다식 이용하여 저장된 값 가져오기
+     */
+    Set<RedisDTO> getSetJSON(String redisKey) throws Exception;
+    /*
+     * ZSet 타입에 JSON 형태로 저장하기
+     */
+    int saveZSetJSON(String redisKey, List<RedisDTO> pList) throws Exception;
+    /*
+     * ZSet 타입에 JSON 형태로 저장된 값 가져오기
+     */
+    Set<RedisDTO> getZSetJSON(String redisKey) throws Exception;
 
 
 }
