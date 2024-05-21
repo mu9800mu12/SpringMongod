@@ -25,6 +25,17 @@ public class MovieController {
 
     private final IMovieService movieService;
 
+    /***
+     * 안냥 로컬호스트로는 돌아가는데 배포하고 도메인 주소로 올리면 ~~ 때문에 안됨
+     */
+
+
+
+
+
+
+
+
     /**
      * CGV 영화 순위 가져오기
      */
