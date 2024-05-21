@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import kopo.poly.dto.MelonDTO;
 import kopo.poly.persistance.mongodb.IMelonMapper;
+import kopo.poly.persistance.redis.IMelonCacheMapper;
 import kopo.poly.service.IMelonService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
@@ -21,6 +22,9 @@ import org.springframework.stereotype.Service;
 public class MelonService implements IMelonService {
 
     private final IMelonMapper melonMapper;
+    
+    private final IMelonCacheMapper melonCacheMapper;
+    
 
     private List<MelonDTO> doCollect() throws Exception {
         log.info(this.getClass().getName() + "두 셀렉트 시작!");
@@ -65,6 +69,10 @@ public class MelonService implements IMelonService {
         List<MelonDTO> rList = this.doCollect();
 
         res = melonMapper.insertSong(rList, colNm);
+        
+        if(!melonCacheMapper.getExistKey(colNm)) { //Redis에 데이터가 없다면
+            res = melonCacheMapper.insertSong(rList, colNm); // Redis에 저장하기
+        }
 
         log.info(this.getClass().getName() + "컬렌션 맬론 송 끝");
 
@@ -76,8 +84,18 @@ public class MelonService implements IMelonService {
         log.info(this.getClass().getName() + "겟송 리스트 시작");
 
         String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+        
+        List<MelonDTO> rList;
+        
+        if (melonCacheMapper.getExistKey(colNm)) {  //레디스에 데이터가 없다면
+            rList = melonCacheMapper.getSongList(colNm); // 저장하기
+            
+        } else {
+            rList = melonMapper.getSongList(colNm); // 몽고디비에서 데이터 가져오기
+        }
 
-        List<MelonDTO> rList = melonMapper.getSongList(colNm);
+        log.info(this.getClass().getName() + "겟송 리스트 끝");
+        
 
         return rList;
     }
